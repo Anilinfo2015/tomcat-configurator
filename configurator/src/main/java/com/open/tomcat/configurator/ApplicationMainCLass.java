@@ -15,7 +15,10 @@ public class ApplicationMainCLass
 
         ServerXMLBuilder parser = new ServerXMLBuilder(
                 TomcatCongurator.SERVER_XML_DEFAULT);
-        
-        parser.newhttpPort(7070).save();
+
+        parser.newhttpPort(7099).newShutdownPort(8989)
+                .newhttpsKeyStore("c:/temp")
+                .newhttpsKeyStorePassword("anil".toCharArray())
+                .newhttpsPort(9433).save();
     }
 }

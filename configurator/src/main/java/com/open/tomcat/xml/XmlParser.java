@@ -2,6 +2,7 @@ package com.open.tomcat.xml;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,9 +18,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XmlParser
@@ -68,28 +66,10 @@ public class XmlParser
         Document doc = dBuilder.parse(fXmlFile);
         doc.getDocumentElement().normalize();
 
-        NodeList nList = doc.getElementsByTagName("Connector");
-
-        for (int temp = 0; temp < nList.getLength(); temp++)
-        {
-            Node nNode = nList.item(temp);
-
-            System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
-            if (nNode.getNodeType() == Node.ELEMENT_NODE)
-            {
-
-                Element eElement = (Element) nNode;
-
-                System.out.println(eElement.getTagName());
-
-            }
-        }
-
         return doc;
     }
 
-    public void saveXML(Document document)
+    public void saveXML(Document document,String fileName)
     {
         try
         {
@@ -97,7 +77,7 @@ public class XmlParser
             Transformer transformer = tFactory.newTransformer();
 
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(System.out);
+            StreamResult result = new StreamResult(new FileWriter(new File(fileName)));
             
             transformer.transform(source, result);
         }
@@ -108,6 +88,10 @@ public class XmlParser
         catch (TransformerException te)
         {
             te.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }
